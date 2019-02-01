@@ -68,8 +68,8 @@ def find_and_parse_tiff_files(parent_directory):
         yield (image, width, height, filename)
     
 
-def save_crops():
-    parent_directory = "this is where I put the parent directory"
+def save_cropped_images(images_directory):
+    parent_directory = images_directory
     for image, width, height, filename in find_and_parse_tiff_files(parent_directory):
         original_filename = filename
         file_path_pieces = original_filename.split(os.sep)
@@ -77,3 +77,6 @@ def save_crops():
         for cropped, x_0, y_0, image_crop_x, image_crop_y in crop_images_to_512_512(image, width, height):
             build_string = lambda x_0, y_0, file_stripped_name: "cropped_image_%s_%d_%d.jpg" % (file_stripped_name, x_0 , y_0)
             save_image_as_jpg(cropped, build_string(x_0, y_0, file_stripped_name))
+
+if __name__ == "__main__":
+    pass ## need to add system argument stuff
