@@ -33,8 +33,8 @@ def harvest(images_parent_directory, annotations_parent_directory, crop_director
             save_cropped_annotations(annotation_filename, width, height, crop_directory)
 
             print("Cropped: ", file_stripped_name)
-        except:
-            print(Exception)
+        except Exception e:
+            print(e)
 
     
 if __name__ == "__main__":
