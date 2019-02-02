@@ -7,7 +7,7 @@
 """
 import os
 import numpy as np
-import cv2
+
 from glob import glob
 import logging
 from PIL import Image
@@ -50,10 +50,11 @@ def save_image_as_jpg(image_array, outfile, crop_directory):
     try:
         image = Image.fromarray(image_array.astype('uint8'), 'RGB')
         outfile = os.path.join(crop_directory, "images", outfile)
-        image.point(lambda i: i*(1./256)).convert('L').save(outfile + ".jpg")
+        # result = image.point(lambda i: i*(1./256)).convert('L')
+        image.save(outfile + ".jpg")
         print("Output Saved: ", outfile)
-    except:
-        print(Exception)
+    except Exception as e:
+        print(e)
 
 
 def save_cropped_image(image, width, height, file_stripped_name, crop_directory):

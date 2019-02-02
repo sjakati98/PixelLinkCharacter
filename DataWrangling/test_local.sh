@@ -1,0 +1,1 @@
+python harvest_crops.py "/Volumes/MAPRECO/data/maps" "/Volumes/MAPRECO/data/maps/annotations" "/Volumes/MAPRECO/data/maps/cropped"

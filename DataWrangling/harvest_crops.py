@@ -5,6 +5,7 @@
 """
 from glob import glob
 import os
+import numpy as np
 from PIL import Image
 import sys
 from crop_and_convert_tiff import save_cropped_image
@@ -22,12 +23,12 @@ def harvest(images_parent_directory, annotations_parent_directory, crop_director
         try:
             ## get the stripped filename
             file_stripped_name = filename.split(os.sep)[-1].split('.')[0]
-            annotation_filename = os.path.join(annotations_parent_directory, file_stripped_name, ".npy")
+            annotation_filename = os.path.join(annotations_parent_directory, file_stripped_name + ".npy")
             image = Image.open(filename)
             width, height = image.size
 
             ## start image cropping
-            save_cropped_image(image, width, height, file_stripped_name, crop_directory)
+            save_cropped_image(np.array(image), width, height, file_stripped_name, crop_directory)
             
             ## start annotation cropping
             save_cropped_annotations(annotation_filename, width, height, crop_directory)
@@ -41,5 +42,11 @@ if __name__ == "__main__":
     images_parent_directory = sys.argv[1]
     annotations_parent_directory = sys.argv[2]
     crop_directory = sys.argv[3]
+
+    ## need to create the cropped images and annotations directory
+    if not os.path.exists(crop_directory):
+        os.mkdir(crop_directory)
+        os.mkdir(os.path.join(crop_directory, "images"))
+        os.mkdir(os.path.join(crop_directory, "annotations"))
 
     harvest(images_parent_directory, annotations_parent_directory, crop_directory)
