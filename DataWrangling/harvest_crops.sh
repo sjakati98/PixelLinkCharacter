@@ -1,0 +1,1 @@
+python harvest_crops.py "/home/sgkelley/data/maps" "/mnt/nfs/work1/elm/ray/all_char_anots/char_anots_A/current" "/mnt/nfs/work1/elm/sgkelley/cropped"

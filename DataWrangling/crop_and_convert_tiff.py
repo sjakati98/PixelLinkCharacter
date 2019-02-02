@@ -39,44 +39,32 @@ def crop_images_to_512_512(image_array, height, width):
             cropped = image_array[y_0:y_0+image_crop_y, x_0:x_0+image_crop_x]
             yield (cropped, x_0, y_0, image_crop_x, image_crop_y)
 
-def save_image_as_jpg(image_array, outfile):
+def save_image_as_jpg(image_array, outfile, crop_directory):
     
     ## Arguments
         ## image_array: This is the array container of the image pixels
         ## outfile: Path to new location of converted image; DO NOT ADD EXTENSION
+        ## crop_directory: Parent directory of the newly cropped image
     ## Outputs
         ## None; will log output
     try:
         image = Image.fromarray(image_array.astype('uint8'), 'RGB')
-        image.point(lambda i: i*(1./256)).convert('L').save(outfile + ".jpeg")
+        outfile = os.path.join(crop_directory, "images", outfile)
+        image.point(lambda i: i*(1./256)).convert('L').save(outfile + ".jpg")
         print("Output Saved: ", outfile)
     except:
         print(Exception)
 
-def find_and_parse_tiff_files(parent_directory):
-    ## Generator function
+
+def save_cropped_image(image, width, height, file_stripped_name, crop_directory):
+
     ## Arguments
-        ## parent_directory: Directory where the TIFF images live
-    ## Outputs
-        ## image: image array of the TIFF image
-        ## filename: Filename of a TIFF image file
-    
-    image_filenames = glob(os.path.join(parent_directory, "*.tiff"))
-    for filename in image_filenames:
-        image = Image.open(filename)
-        width, height = image.size
-        yield (image, width, height, filename)
-    
+        ## image: Image array of image to be cropped
+        ## width: Width of the image; for naming usage
+        ## height: Height of the image; from naming usage
+        ## file_stripped_name: Raw name identifier of the image
+        ## crop_directory: Parent directory of the newly cropped images
 
-def save_cropped_images(images_directory):
-    parent_directory = images_directory
-    for image, width, height, filename in find_and_parse_tiff_files(parent_directory):
-        original_filename = filename
-        file_path_pieces = original_filename.split(os.sep)
-        file_stripped_name = file_path_pieces[-1].split('.')[0]
-        for cropped, x_0, y_0, image_crop_x, image_crop_y in crop_images_to_512_512(image, width, height):
-            build_string = lambda x_0, y_0, file_stripped_name: "cropped_image_%s_%d_%d.jpg" % (file_stripped_name, x_0 , y_0)
-            save_image_as_jpg(cropped, build_string(x_0, y_0, file_stripped_name))
-
-if __name__ == "__main__":
-    pass ## need to add system argument stuff
+    for cropped, x_0, y_0, _, _ in crop_images_to_512_512(image, width, height):
+        build_string = lambda x_0, y_0, file_stripped_name: "cropped_image_%s_%d_%d" % (file_stripped_name, x_0 , y_0)
+        save_image_as_jpg(cropped, build_string(x_0, y_0, file_stripped_name), crop_directory)

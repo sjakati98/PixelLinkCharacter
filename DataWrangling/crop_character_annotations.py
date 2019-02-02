@@ -1,8 +1,12 @@
+"""
+    Author: Shishir Jakati
+
+    Create crops of annotations.
+"""
+
 import numpy as np
 from glob import glob
 import os
-import cv2
-import sys
 
 def check_box_in_crop(box_coordinates, crop_x, crop_y, crop_width=512, crop_height=512):
 	"""
@@ -33,46 +37,45 @@ def check_box_in_crop(box_coordinates, crop_x, crop_y, crop_width=512, crop_heig
 
 	return relative_coordinates
 
-def find_and_parse_npy_files(parent_directory):
-    ## Generator function
-    ## Arguments
-        ## parent_directory: Directory where the NPY annotations live
-    ## Outputs
-        ## _dict: Verticies format of annotations
+def find_and_parse_npy_files(annotation_file):
 
-    annotation_filenames = glob(os.path.join(parent_directory, "*.npy"))
-    for annotation_file in annotation_filenames:
-        anot = np.load(annotation_file)
-        _dict = np.reshape(anot, -1)[0]
-        yield (_dict, annotation_file)
+	## Arguments
+		## annotation_file: The npy annotation file
+	## Outputs
+		## _dict: Dictionary of all the verticies
 
-def get_image_dimensions(file_name_no_extension, images_dir_path):
-	current_image_path = os.path.join(images_dir_path, file_name_no_extension + ".tiff")
-	current_image_path = os.path.join(images_dir_path, file_name_no_extension + ".tiff")
-	current_image = cv2.imread(current_image_path)
-	(width, height, _) = current_image.shape
-	return width, height
+	anot = np.load(annotation_file)
+	_dict = np.reshape(anot, -1)[0]
+	return _dict
 
-def save_cropped_annotations(annotations_directory, images_dir_path):
-	parent_directory = annotations_directory
-	for _dict, annotation_file in find_and_parse_npy_files(parent_directory):
+
+
+def save_cropped_annotations(annotation_file, width, height, crop_directory):
+
+	## Arguments
+		## annotation_file: This is the original annotation file that will be cropped into regions
+		## width: Width of the corresponding image
+		## height: Height of the corresponding image
+		## crop_directory: Where the cropped region annotations will live
+
+	_dict = find_and_parse_npy_files(annotation_file)
+
+	file_name_no_extension = annotation_file.split(os.sep)[-1].split('.')[0]
 		
-		file_name_no_extension = annotation_file.split('.')[0]
+	image_x_max = width
+	image_y_max = height
 
-		width, height = get_image_dimensions(file_name_no_extension, images_dir_path)
-		image_x_max = width 
-		image_y_max = height
+	image_crop_x = image_crop_y = 512
+	image_crop_step = 200
 
-		image_crop_x = image_crop_y = 512
-		image_crop_step = 200
+	for y_0 in range(0, image_y_max - image_crop_y, image_crop_step):
+		for x_0 in range(0, image_x_max - image_crop_x, image_crop_step):
+			with open(os.path.join(crop_directory, "annotations", ("annotation_%s_%d_%d.txt" % (file_name_no_extension, x_0 , y_0))), "w+") as f:
+				for key in _dict:
+					verticies = _dict[key]['vertices']
+					if len(verticies) == 4:
+						relative_coordinates = check_box_in_crop(verticies, x_0, y_0, image_crop_x, image_crop_y)
+						if relative_coordinates is not None: 
+							box_string = ",".join([str(x) for t in relative_coordinates for x in t])
+							f.write("%s\n" % box_string)
 
-		for y_0 in range(0, image_y_max - image_crop_y, image_crop_step):
-			for x_0 in range(0, image_x_max - image_crop_x, image_crop_step):
-				with open(os.path.join(annotations_directory, "cropped", ("annotation_%s_%d_%d.txt" % (file_name_no_extension, x_0 , y_0))), "w+") as f:
-					for key in _dict:
-						verticies = _dict[key]['vertices']
-						if len(verticies) == 4:
-							relative_coordinates = check_box_in_crop(verticies, x_0, y_0, image_crop_x, image_crop_y)
-							if relative_coordinates is not None: 
-								box_string = ",".join([str(x) for t in relative_coordinates for x in t])
-								f.write("%s\n" % box_string)
