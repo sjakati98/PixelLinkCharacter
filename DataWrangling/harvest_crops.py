@@ -34,7 +34,8 @@ def harvest(images_parent_directory, annotations_parent_directory, crop_director
                 ## get the corresponding annotation filename
                 annotation_filename = os.path.join(annotations_parent_directory, annotation_folder, "current", file_stripped_name + ".npy")
                 ## start annotation cropping
-                print("Looking for file: ", annotation_filename)
+                ## make the folder for the crops
+                os.mkdir(os.path.join(crop_directory, annotation_folder))
                 save_cropped_annotations(annotation_filename, width, height, os.path.join(crop_directory, annotation_folder))
 
             print("Cropped: ", file_stripped_name)
