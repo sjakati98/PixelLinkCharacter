@@ -30,7 +30,7 @@ def harvest(images_parent_directory, annotations_parent_directory, crop_director
             ## start image cropping
             save_cropped_image(np.array(image), width, height, file_stripped_name, crop_directory)
 
-            for annotation_folder in list(filter(lambda folder: os.path.isdir(os.path.join(annotations_parent_directory, folder), os.listdir(annotations_parent_directory))):
+            for annotation_folder in list(filter(lambda folder: os.path.isdir(os.path.join(annotations_parent_directory, folder), os.listdir(annotations_parent_directory)))):
                 ## get the corresponding annotation filename
                 annotation_filename = os.path.join(annotations_parent_directory, annotation_folder, "current", file_stripped_name + ".npy")
                 ## start annotation cropping
