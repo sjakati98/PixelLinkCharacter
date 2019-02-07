@@ -70,7 +70,7 @@ def save_cropped_annotations(annotation_file, width, height, crop_directory):
 
 	for y_0 in range(0, image_y_max - image_crop_y, image_crop_step):
 		for x_0 in range(0, image_x_max - image_crop_x, image_crop_step):
-			with open(os.path.join(crop_directory, "annotations", ("annotation_%s_%d_%d.txt" % (file_name_no_extension, x_0 , y_0))), "w+") as f:
+			with open(os.path.join(crop_directory, ("annotation_%s_%d_%d.txt" % (file_name_no_extension, x_0 , y_0))), "w+") as f:
 				for key in _dict:
 					verticies = _dict[key]['vertices']
 					if len(verticies) == 4:
