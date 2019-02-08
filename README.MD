@@ -3,9 +3,10 @@
 Goal of this project is to use PixelLink to detect individual characters within our map recognition dataset. 
 
 ## To Do:
-- [ ] Clean and crop dataset to match PixelLink record format
-    - [ ] Add functionality to handle cropping for each letter
+- [X] Clean and crop dataset to match PixelLink record format
+    - [X] Add functionality to handle cropping for each letter
     - [X] Remember to add system arguments for directories to crop scripts
     - [X] Could combine the crop scripts
+- [ ] Create TFRecord format of cropped images and annotations
 - [ ] Train on character annotations
 - [ ] Output training performance, and testing IoU
