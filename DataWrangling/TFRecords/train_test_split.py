@@ -46,7 +46,7 @@ with open(os.path.join(train_split_path, "train_split.txt"), 'w+') as train_file
                 os.mkdir(current_annotation_folder)
             
             annotation_file_name = os.path.join(annotations_dir_path, annotation_folder, "annotation_" + image_name + ".txt")
-            output_annotation_file_name = os.path.join(train_split_annotations_path,, annotation_folder "annotation_" + image_name + ".txt")
+            output_annotation_file_name = os.path.join(train_split_annotations_path, annotation_folder, "annotation_" + image_name + ".txt")
             copyfile(annotation_file_name, output_annotation_file_name)
 
 with open(os.path.join(test_split_path, "test_split.txt"), 'w+') as test_file:
@@ -61,6 +61,6 @@ with open(os.path.join(test_split_path, "test_split.txt"), 'w+') as test_file:
                 os.mkdir(current_annotation_folder)
             
             annotation_file_name = os.path.join(annotations_dir_path, annotation_folder, "annotation_" + image_name + ".txt")
-            output_annotation_file_name = os.path.join(test_split_annotations_path,, annotation_folder "annotation_" + image_name + ".txt")
+            output_annotation_file_name = os.path.join(test_split_annotations_path, annotation_folder, "annotation_" + image_name + ".txt")
             copyfile(annotation_file_name, output_annotation_file_name)
 
