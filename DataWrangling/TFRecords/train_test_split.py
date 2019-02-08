@@ -35,8 +35,10 @@ with open(os.path.join(images_dir_path, "train_split.txt"), 'w+') as train_file:
             current_annotation_folder = os.path.join(train_split_path, "annotations", annotation_folder)
             if not os.path.exists(current_annotation_folder):
                 os.mkdir(current_annotation_folder)
-            annotation_file_name = os.path.join(current_annotation_folder, "annotation_" + image_name + ".txt")
-            copyfile(annotation_file_name, os.path.join(current_annotation_folder, "annotation_" + image_name + ".txt"))
+            
+            annotation_file_name = os.path.join(annotations_dir_path, current_annotation_folder, "annotation_" + image_name + ".txt")
+            output_annotation_file_name = os.path.join(current_annotation_folder, "annotation_" + image_name + ".txt")
+            copyfile(annotation_file_name, output_annotation_file_name)
 
 with open(os.path.join(images_dir_path, "test_split.txt"), 'w+') as test_file:
     for idx in test_idx:
@@ -48,6 +50,8 @@ with open(os.path.join(images_dir_path, "test_split.txt"), 'w+') as test_file:
             current_annotation_folder = os.path.join(test_split_path, "annotations", annotation_folder)
             if not os.path.exists(current_annotation_folder):
                 os.mkdir(current_annotation_folder)
-            annotation_file_name = os.path.join(current_annotation_folder, "annotation_" + image_name + ".txt")
-            copyfile(annotation_file_name, os.path.join(current_annotation_folder, "annotation_" + image_name + ".txt"))
+            
+            annotation_file_name = os.path.join(annotations_dir_path, current_annotation_folder, "annotation_" + image_name + ".txt")
+            output_annotation_file_name = os.path.join(current_annotation_folder, "annotation_" + image_name + ".txt")
+            copyfile(annotation_file_name, output_annotation_file_name)
 
