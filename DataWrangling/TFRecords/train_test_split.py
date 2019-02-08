@@ -38,7 +38,7 @@ with open(os.path.join(train_split_path, "train_split.txt"), 'w+') as train_file
     for idx in train_idx:
         image_filename = image_filenames[idx]
         train_file.write("%s\n" % image_filename)
-        copyfile(image_filename, os.path.join(train_split_images_path image_filename.split(os.sep)[-1]))
+        copyfile(image_filename, os.path.join(train_split_images_path, image_filename.split(os.sep)[-1]))
         image_name = get_image_name(image_filename)
         for annotation_folder in list(filter(lambda folder: os.path.isdir(os.path.join(annotations_dir_path, folder)), os.listdir(annotations_dir_path))):
             current_annotation_folder = os.path.join(train_split_annotations_path, annotation_folder)
@@ -53,7 +53,7 @@ with open(os.path.join(test_split_path, "test_split.txt"), 'w+') as test_file:
     for idx in test_idx:
         image_filename = image_filenames[idx]
         test_file.write("%s\n" % image_filename)
-        copyfile(image_filename, os.path.join(test_split_images_path image_filename.split(os.sep)[-1]))
+        copyfile(image_filename, os.path.join(test_split_images_path, image_filename.split(os.sep)[-1]))
         image_name = get_image_name(image_filename)
         for annotation_folder in list(filter(lambda folder: os.path.isdir(os.path.join(annotations_dir_path, folder)), os.listdir(annotations_dir_path))):
             current_annotation_folder = os.path.join(test_split_annotations_path, annotation_folder)
