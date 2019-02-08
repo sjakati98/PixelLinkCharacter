@@ -5,6 +5,9 @@ import util
 import os
 from dataset_utils import int64_feature, float_feature, bytes_feature, convert_to_example
 import config
+
+import sys
+sys.path.append('/home/sgkelley/pixel_link')
         
 
 def cvt_to_tfrecords(output_path , data_path, gt_path):
