@@ -7,6 +7,7 @@ Goal of this project is to use PixelLink to detect individual characters within 
     - [X] Add functionality to handle cropping for each letter
     - [X] Remember to add system arguments for directories to crop scripts
     - [X] Could combine the crop scripts
+    - [ ] Need to add '###' label to all cropped annotations
 - [ ] Create TFRecord format of cropped images and annotations
 - [ ] Train on character annotations
 - [ ] Output training performance, and testing IoU
