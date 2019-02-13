@@ -32,7 +32,7 @@ def cvt_to_tfrecords(output_path , data_path, gt_path):
             w *= 1.0;
             image_name = util.str.split(image_name, '.')[0];
             
-            gt_name = 'annotation_' + image_name + '.txt';
+            gt_name = 'annotation_' + image_name[14:] + '.txt';
             gt_filepath = util.io.join_path(gt_path, gt_name);
             lines = util.io.read_lines(gt_filepath);
                 
@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
     training_data_dir = util.io.join_path(train_split_dir, 'images')
     output_dir = util.io.join_path(os.path.join(train_split_dir, 'tfrecords'))
-    annotations_parent_directory = util.io.join(train_split_dir, 'annotations')
+    annotations_parent_directory = util.io.join_path(train_split_dir, 'annotations')
     for annotation_folder in list(filter(lambda folder: os.path.isdir(os.path.join(annotations_parent_directory, folder)), os.listdir(annotations_parent_directory))):
         training_gt_dir = util.io.join_path(train_split_dir, 'annotations', annotation_folder)
         cvt_to_tfrecords(output_path = util.io.join_path(output_dir, annotation_folder + '_train.tfrecord'), data_path = training_data_dir, gt_path = training_gt_dir)
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     
     output_dir = util.io.join_path(os.path.join(train_split_dir, 'tfrecords'))
     test_data_dir = util.io.join_path(test_split_dir, 'images')
-    annotations_parent_directory = util.io.join(test_split_dir, 'annotations')
+    annotations_parent_directory = util.io.join_path(test_split_dir, 'annotations')
     for annotation_folder in list(filter(lambda folder: os.path.isdir(os.path.join(annotations_parent_directory, folder)), os.listdir(annotations_parent_directory))):
         test_gt_dir = util.io.join_path(test_split_dir, 'annotations', annotation_folder)
         cvt_to_tfrecords(output_path = util.io.join_path(output_dir, annotation_folder + '_test.tfrecord'), data_path = test_data_dir, gt_path = test_gt_dir)
