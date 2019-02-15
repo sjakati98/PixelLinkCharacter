@@ -92,5 +92,11 @@ def driver(original_images_dir, predicted_annotations_dir, output_dir):
 original_images_dir = sys.argv[1]
 predicted_annotations_dir = sys.argv[2]
 output_dir = sys.argv[3]
+
+print("Ingesting images from:", original_images_dir)
+print("Ingesting annotations from: ", predicted_annotations_dir)
+print("Saving annotated images to:", output_dir)
+
 driver(original_images_dir, predicted_annotations_dir, output_dir)
+
 print("Done Annotating")
