@@ -41,12 +41,15 @@ def create_file_dictionary(original_images_dir, predicted_annotations_dir):
             }
     """
     image_filenames = glob(os.path.join(original_images_dir, "*.tiff"))
-    predicted_filenames = glob(os.path.join(predicted_annotations_dir, ".txt"))
+    predicted_filenames = glob(os.path.join(predicted_annotations_dir, "*.txt"))
     print("Number of annotations files: ", len(predicted_filenames))
     image_dict = {filename[:-5].split(os.sep)[-1]: [] for filename in image_filenames}
     for filename in predicted_filenames:
         image_name, _, _ = res_to_image_anchor(filename)
-        image_dict[image_name] = image_dict.get(image_name, []).append(os.path.join(predicted_annotations_dir, filename)) ## need to append the absolute file path
+        if image_name not in image_dict:
+            image_dict[image_name] = [os.path.join(predicted_annotations_dir, filename)]
+        else:
+            image_dict[image_name] = image_dict[image_name].append(os.path.join(predicted_annotations_dir, filename))
     return image_dict
 
 def list_crops_to_annotated_image(original_image, annotations, outfile):
