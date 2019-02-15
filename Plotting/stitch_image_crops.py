@@ -63,6 +63,7 @@ def list_crops_to_annotated_image(original_image, annotations, outfile):
             oriented_box = [int(gt[i]) for i in range(8)]
             draw.rectangle([oriented_box[0] + anchor_x0, oriented_box[1] + anchor_y0, oriented_box[-2] + anchor_x0, oriented_box[-1] + anchor_y0])
     image.save(outfile)
+    print("Image Saved: ", outfile)
 
 
 def driver(original_images_dir, predicted_annotations_dir, output_dir):
