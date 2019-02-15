@@ -82,6 +82,7 @@ def driver(original_images_dir, predicted_annotations_dir, output_dir):
     
     image_dict = create_file_dictionary(original_images_dir, predicted_annotations_dir)
     print("Dictionary Created")
+    print(image_dict)
     for i, image in enumerate(image_dict.keys()):
         print("Key #:", i)
         ## pass the function the image filename and the list of annotation files
