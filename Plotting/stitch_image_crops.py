@@ -54,6 +54,7 @@ def list_crops_to_annotated_image(original_image, annotations, outfile):
             - annotations: The annotation filepaths that need to be translated and drawn on the image copy
             - outfile: Where the drawn on image should be saved
     """
+    print("Stitching Image: ", original_image)
     image = Image.open(original_image)
     draw = ImageDraw.Draw(image)
     for annotation in annotations:
@@ -77,7 +78,9 @@ def driver(original_images_dir, predicted_annotations_dir, output_dir):
         os.mkdir(output_dir)
     
     image_dict = create_file_dictionary(original_images_dir, predicted_annotations_dir)
-    for image in image_dict.keys():
+    print("Dictionary Created")
+    for i, image in enumerate(image_dict.keys()):
+        print("Key #:", i)
         ## pass the function the image filename and the list of annotation files
         original_image_filename = os.path.join(original_images_dir, image + ".tiff")
         outfile = os.path.join(output_dir, image + ".jpg")
