@@ -23,7 +23,8 @@ def res_to_image_anchor(filename):
             - image_name:  The name of the corresponding large image, with no extension
             - anchor_x0: The x-coordinate of the top left of the associated crop region
             - anchor_y0: The y-coordinate of the top left of the associated crop region
-    """    
+    """
+    filename = filename.split(os.sep)[-1]    
     pattern = "res\_cropped\_image\_(.*)\_(\d*)\_(\d*)\.txt"
     image_name, anchor_x0, anchor_y0 = re.match(pattern, filename).groups()
     return (image_name, int(anchor_x0), int(anchor_y0))
@@ -41,6 +42,7 @@ def create_file_dictionary(original_images_dir, predicted_annotations_dir):
     """
     image_filenames = glob(os.path.join(original_images_dir, "*.tiff"))
     predicted_filenames = glob(os.path.join(predicted_annotations_dir, ".txt"))
+    print("Number of annotations files: ", len(predicted_filenames))
     image_dict = {filename[:-5].split(os.sep)[-1]: [] for filename in image_filenames}
     for filename in predicted_filenames:
         image_name, _, _ = res_to_image_anchor(filename)
