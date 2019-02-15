@@ -58,6 +58,7 @@ def list_crops_to_annotated_image(original_image, annotations, outfile):
     image = Image.open(original_image)
     draw = ImageDraw.Draw(image)
     for annotation in annotations:
+        print("Considering annotations from:", annotation)
         _, anchor_x0, anchor_y0 = res_to_image_anchor(annotation)
         for line in open(annotation).readlines():
             gt = line.split(',')
