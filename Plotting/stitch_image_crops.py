@@ -71,7 +71,7 @@ def list_crops_to_annotated_image(original_image, annotations, outfile):
             gt = line.split(',')
             oriented_box = [int(gt[i]) for i in range(8)]
             print("Drawing Box: ", oriented_box)
-            draw.rectangle([oriented_box[0] + anchor_x0, oriented_box[1] + anchor_y0, oriented_box[-2] + anchor_x0, oriented_box[-1] + anchor_y0], outline='red')
+            draw.rectangle([oriented_box[0] + anchor_x0, oriented_box[1] + anchor_y0, oriented_box[4] + anchor_x0, oriented_box[5] + anchor_y0], outline='red')
     del draw
     image.save(outfile)
     print("Image Saved: ", outfile)
