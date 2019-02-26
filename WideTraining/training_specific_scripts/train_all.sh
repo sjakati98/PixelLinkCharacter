@@ -1,0 +1,10 @@
+#!/bin/bash
+./scripts/training_specific_scripts/train_a.sh
+./scripts/training_specific_scripts/train_b.sh
+./scripts/training_specific_scripts/train_c.sh
+./scripts/training_specific_scripts/train_d.sh
+./scripts/training_specific_scripts/train_e.sh
+./scripts/training_specific_scripts/train_f.sh
+./scripts/training_specific_scripts/train_g.sh
+./scripts/training_specific_scripts/train_h.sh
+./scripts/training_specific_scripts/train_i.sh
