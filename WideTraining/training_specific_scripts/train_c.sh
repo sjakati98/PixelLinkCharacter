@@ -20,7 +20,7 @@ BATCH_SIZE=`expr $NUM_GPUS \* $IMG_PER_GPU`
 #DATASET_PATH=SynthText
 
 DATASET=maptext
-DATASET_DIR=/mnt/nfs/work1/elm/sgkelley/shishir/cropped/train_split/images/
+DATASET_DIR=/mnt/nfs/work1/elm/sgkelley/shishir/cropped/train_split/tfrecords/
 
 python train_pixel_link.py \
             --train_dir=${TRAIN_DIR} \
