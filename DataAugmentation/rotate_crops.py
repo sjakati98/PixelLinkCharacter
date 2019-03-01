@@ -115,3 +115,5 @@ if __name__ == "__main__":
 
     if not os.path.exists(os.path.join(crops_parent_directroy, "rotated")):
         os.mkdir(os.path.join(crops_parent_directroy, "rotated"))
+
+    driver(crops_parent_directroy, rotation_max_angle)
