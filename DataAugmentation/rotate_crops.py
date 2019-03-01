@@ -21,7 +21,7 @@ def save_image_as_jpg(image_array, outfile, crop_directory):
         ## None; will log output
     try:
         image = Image.fromarray(image_array.astype('uint8'), 'RGB')
-        outfile = os.path.join(crop_directory, "images", outfile)
+        outfile = os.path.join(crop_directory, outfile)
         # result = image.point(lambda i: i*(1./256)).convert('L')
         image.save(outfile + ".jpg")
         print("Output Saved: ", outfile)
