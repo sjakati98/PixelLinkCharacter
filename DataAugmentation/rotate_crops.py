@@ -107,7 +107,7 @@ def driver(images_parent_directory, image_rotation_angle_max):
             file_name_no_extension = image_filename.split(os.sep)[-1].split('.')[0]
             build_string = lambda filename, rotation: "%s_%d" % (filename, rotation)
             rotation_mat = rotate_image_and_save(image, angle, (width, height), build_string(file_name_no_extension, angle), os.path.join(images_parent_directory, "rotated"))
-            save_rotation_matrix(rotation_mat, build_string(file_name_no_extension, angle))
+            save_rotation_matrix(rotation_mat, os.path.join(images_parent_directory, "rotated", build_string(file_name_no_extension, angle)))
 
 
 if __name__ == "__main__":
