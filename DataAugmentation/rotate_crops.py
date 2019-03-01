@@ -5,11 +5,29 @@ import cv2
 import numpy as np
 from PIL import Image, ImageDraw
 from glob import glob
-from DataWrangling.Cropping.crop_and_convert_tiff import save_image_as_jpg
+# from DataWrangling.Cropping.crop_and_convert_tiff import save_image_as_jpg
 
 ## get all the images in the directory
 ## create a collection of images that are rotated from -30 to 30 degrees, in 5 degree intervals
 ## save them into a cropped/rotated directory
+
+def save_image_as_jpg(image_array, outfile, crop_directory):
+    
+    ## Arguments
+        ## image_array: This is the array container of the image pixels
+        ## outfile: Path to new location of converted image; DO NOT ADD EXTENSION
+        ## crop_directory: Parent directory of the newly cropped image
+    ## Outputs
+        ## None; will log output
+    try:
+        image = Image.fromarray(image_array.astype('uint8'), 'RGB')
+        outfile = os.path.join(crop_directory, "images", outfile)
+        # result = image.point(lambda i: i*(1./256)).convert('L')
+        image.save(outfile + ".jpg")
+        print("Output Saved: ", outfile)
+    except Exception as e:
+        print(e)
+
 
 def find_crops(images_parent_directory):
     """
