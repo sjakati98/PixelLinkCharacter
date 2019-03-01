@@ -111,7 +111,7 @@ def driver(images_parent_directory, image_rotation_angle_max):
 if __name__ == "__main__":
     
     crops_parent_directroy = sys.argv[1]
-    rotation_max_angle = sys.argv[2]
+    rotation_max_angle = int(sys.argv[2])
 
     if not os.path.exists(os.path.join(crops_parent_directroy, "rotated")):
         os.mkdir(os.path.join(crops_parent_directroy, "rotated"))
