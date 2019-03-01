@@ -67,6 +67,8 @@ def rotate_image_and_save(image, rotation_angle, image_shape, image_outfile, out
     rotation_mat[0, 2] += (adjustedWidth / 2) - image_center[0]
     rotation_mat[1, 2] += (adjustedHeight / 2) - image_center[1]
 
+    image = np.array(image)
+
     rotated_mat = cv2.warpAffine(image, rotation_mat, bounds)
 
     ## save the image
