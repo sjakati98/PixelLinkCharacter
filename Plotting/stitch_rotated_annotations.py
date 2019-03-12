@@ -54,7 +54,7 @@ def create_file_dictionary(original_images_dir, predicted_annotations_dir):
             image_dict[image_name] = [os.path.join(predicted_annotations_dir, filename)]
     return image_dict
 
-def list_crops_to_annotated_image(original_image, annotations, image_default_width=512, image_default_height=512, outfile):
+def list_crops_to_annotated_image(original_image, annotations, outfile, image_default_width=512, image_default_height=512):
     """
         Inputs:
             - original_image: The image which will be copied and have annotations drawn on it
@@ -66,13 +66,14 @@ def list_crops_to_annotated_image(original_image, annotations, image_default_wid
     draw = ImageDraw.Draw(image)
     for annotation in annotations:
         print("Considering annotations from:", annotation)
-        _, anchor_x0, anchor_y0 = res_to_image_anchor(annotation)
+        _, anchor_x0, anchor_y0, angle = res_to_image_anchor(annotation)
         for line in open(annotation).readlines():
             gt = line.split(',')
             oriented_box = [int(gt[i]) for i in range(8)]
 
             ## need to warp oriented box using the negative angle
-            height, width = image_shape[0], image_shape[1]
+            height, width = image.size
+            rotation_angle = -angle
             image_center = (width // 2, height // 2)
             rotation_mat = cv2.getRotationMatrix2D(image_center, rotation_angle, scale=1.0)
             adjustedWidth = image_default_width
