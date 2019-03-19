@@ -6,9 +6,11 @@
 import re
 import os
 import sys
+import cv2
 import numpy as np
 from PIL import Image, ImageDraw
 from glob import glob
+
 
 ## function to partition the whole predicted files into large files
 ## res_cropped_image_D5005-5028149_800_5000.txt is the format
