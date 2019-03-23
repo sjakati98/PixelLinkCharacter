@@ -81,7 +81,7 @@ def list_crops_to_annotated_image(original_image, annotations, outfile, image_de
             
             image_center = (width // 2, height // 2)
             
-            oriented_box = rotate_box(oriented_box, rotation_angle, image_center[0], image_center[1], height, width)
+            oriented_box = rotate_box(oriented_box, rotation_angle, image_center[0], image_center[1], height, width)[0]
 
             print("Drawing Box: ", oriented_box)
             draw.rectangle([oriented_box[6] + anchor_x0, oriented_box[7] + anchor_y0, oriented_box[2] + anchor_x0, oriented_box[3] + anchor_y0], outline='red')
