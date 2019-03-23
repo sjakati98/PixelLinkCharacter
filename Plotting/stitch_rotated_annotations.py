@@ -3,14 +3,16 @@
     This file takes in predicted annotations of crops of one particular image, which is rotated,
     and then draws on the original large image
 """
-import re
 import os
+import re
 import sys
-import cv2
-import numpy as np
-from PIL import Image, ImageDraw
 from glob import glob
 
+import cv2
+import numpy as np
+
+from PIL import Image, ImageDraw
+from online_rotation import rotate_box
 
 ## function to partition the whole predicted files into large files
 ## res_cropped_image_D5005-5028149_800_5000.txt is the format
@@ -71,19 +73,15 @@ def list_crops_to_annotated_image(original_image, annotations, outfile, image_de
         _, anchor_x0, anchor_y0, angle = res_to_image_anchor(annotation)
         for line in open(annotation).readlines():
             gt = line.split(',')
-            oriented_box = [int(gt[i]) for i in range(8)]
-            oriented_box = np.array(oriented_box, dtype=np.uint8)
+            oriented_box = np.array([int(gt[i]) for i in range(8)])
+            
             ## need to warp oriented box using the negative angle
             height, width = image.size
             rotation_angle = -angle
+            
             image_center = (width // 2, height // 2)
-            rotation_mat = cv2.getRotationMatrix2D(image_center, rotation_angle, scale=1.0)
-            adjustedWidth = image_default_width
-            adjustedHeight = image_default_height
-            bounds = (adjustedWidth, adjustedHeight)
-            rotation_mat[0, 2] += (adjustedWidth / 2) - image_center[0]
-            rotation_mat[1, 2] += (adjustedHeight / 2) - image_center[1]
-            oriented_box = cv2.warpAffine(oriented_box, rotation_mat, bounds)
+            
+            oriented_box = rotate_box(oriented_box, rotation_angle, image_center[0], image_center[1], height, width)
 
             print("Drawing Box: ", oriented_box)
             draw.rectangle([oriented_box[6] + anchor_x0, oriented_box[7] + anchor_y0, oriented_box[2] + anchor_x0, oriented_box[3] + anchor_y0], outline='red')
