@@ -33,8 +33,8 @@ def rotate_box(corners,angle, h, w):
     ## top left : (corner[2], corner[3])
     ## bottom right: (corner[6], corner[7])
 
-    cx = corners[6] - corners[2]
-    cy = corners[7] - corners[3]
+    cx = (corners[6] - corners[2]) / 2.0
+    cy = (corners[7] - corners[3]) / 2.0
 
 
     corners = corners.reshape(-1,2)
