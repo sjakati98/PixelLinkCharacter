@@ -30,8 +30,11 @@ def rotate_box(corners,angle, h, w):
         corner co-ordinates `x1 y1 x2 y2 x3 y3 x4 y4`
     """
 
-    cx = abs(corners[0] - corners[6])
-    cy = abs(corners[1] - corners[7])
+    ## top left : (corner[2], corner[3])
+    ## bottom right: (corner[6], corner[7])
+
+    cx = corners[6] - corners[2]
+    cy = corners[7] - corners[3]
 
 
     corners = corners.reshape(-1,2)
