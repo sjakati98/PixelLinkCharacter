@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-def rotate_box(corners,angle, cx, cy, h, w):
+def rotate_box(corners,angle, h, w):
     
     """Rotate the bounding box.
     
@@ -16,13 +16,6 @@ def rotate_box(corners,angle, cx, cy, h, w):
     
     angle : float
         angle by which the image is to be rotated
-        
-    cx : int
-        x coordinate of the center of image (about which the box will be rotated)
-        
-    cy : int
-        y coordinate of the center of image (about which the box will be rotated)
-        
     h : int 
         height of the image
         
@@ -36,6 +29,10 @@ def rotate_box(corners,angle, cx, cy, h, w):
         Numpy array of shape `N x 8` containing N rotated bounding boxes each described by their 
         corner co-ordinates `x1 y1 x2 y2 x3 y3 x4 y4`
     """
+
+    cx = abs(corners[0] - corners[6])
+    cy = abs(corners[1] - corners[7])
+
 
     corners = corners.reshape(-1,2)
     corners = np.hstack((corners, np.ones((corners.shape[0],1), dtype = type(corners[0][0]))))
