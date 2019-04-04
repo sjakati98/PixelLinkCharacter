@@ -76,15 +76,24 @@ def list_crops_to_annotated_image(original_image, annotations, outfile, image_de
             oriented_box = np.array([int(gt[i]) for i in range(8)])
             
             ## need to warp oriented box using the negative angle
-            height, width = image.size
+            # height, width = image.size
             rotation_angle = -angle
             
-            image_center = (width // 2, height // 2)
-            
-            oriented_box = rotate_box(oriented_box, rotation_angle, height, width)[0]
+            ## get the center of the box
+            box_width = abs((oriented_box[4] - oriented_box[2]) // 2)
+            box_height = abs((oriented_box[3] - oriented_box[1]) // 2)
+            box_center = (oriented_box[0] + box_width, oriented_box[3] + box_height)
+            ## rotate the box over the center of the box
+            box_matrix  = cv2.getRotationMatrix2D(box_center, rotation_angle, 1.0)
 
-            print("Drawing Box: ", oriented_box)
-            draw.rectangle([oriented_box[6] + anchor_x0, oriented_box[7] + anchor_y0, oriented_box[2] + anchor_x0, oriented_box[3] + anchor_y0], outline='red')
+            corners = oriented_box.reshape(-1,2)
+            corners = np.hstack((corners, np.ones((corners.shape[0],1), dtype = type(corners[0][0]))))
+            ## calculate the new box
+            new_box = np.dot(box_matrix, corners.T).T.reshape(1, 8)[0]
+            new_box = [int(x) for x in [new_box[0] + anchor_x0, new_box[1] + anchor_y0, new_box[2] + anchor_x0, new_box[3] + anchor_y0, new_box[4] + anchor_x0, new_box[5] + anchor_y0, new_box[6] + anchor_x0, new_box[7] + anchor_x0]]
+
+            print("Drawing Box: ", new_box)
+            draw.polygon(new_box, outline="blue", fill=None)
     del draw
     image.save(outfile)
     print("Image Saved: ", outfile)
