@@ -90,7 +90,7 @@ def list_crops_to_annotated_image(original_image, annotations, outfile, image_de
             corners = np.hstack((corners, np.ones((corners.shape[0],1), dtype = type(corners[0][0]))))
             ## calculate the new box
             new_box = np.dot(box_matrix, corners.T).T.reshape(1, 8)[0]
-            new_box = [int(x) for x in [new_box[0] + anchor_x0, new_box[1] + anchor_y0, new_box[2] + anchor_x0, new_box[3] + anchor_y0, new_box[4] + anchor_x0, new_box[5] + anchor_y0, new_box[6] + anchor_x0, new_box[7] + anchor_x0]]
+            new_box = [int(x) for x in [new_box[0] + anchor_x0, new_box[1] + anchor_y0, new_box[2] + anchor_x0, new_box[3] + anchor_y0, new_box[4] + anchor_x0, new_box[5] + anchor_y0, new_box[6] + anchor_x0, new_box[7] + anchor_y0]]
 
             print("Drawing Box: ", new_box)
             draw.polygon(new_box, outline="blue", fill=None)
