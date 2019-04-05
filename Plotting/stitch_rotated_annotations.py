@@ -70,14 +70,14 @@ def list_crops_to_annotated_image(original_image, annotations, outfile, image_de
     draw = ImageDraw.Draw(image)
     for annotation in annotations:
         print("Considering annotations from:", annotation)
-        _, anchor_y0, anchor_x0, angle = res_to_image_anchor(annotation)
+        _, anchor_x0, anchor_y0, angle = res_to_image_anchor(annotation)
         for line in open(annotation).readlines():
             gt = line.split(',')
             oriented_box = np.array([int(gt[i]) for i in range(8)])
             
             ## need to warp oriented box using the negative angle
             # height, width = image.size
-            rotation_angle = -angle
+            rotation_angle = -angles
             
             ## get the center of the box
             box_width = abs((oriented_box[4] - oriented_box[2]) // 2)
