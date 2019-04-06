@@ -70,22 +70,44 @@ def list_crops_to_annotated_image(original_image, annotations, outfile, image_de
     draw = ImageDraw.Draw(image)
     for annotation in annotations:
         print("Considering annotations from:", annotation)
-        _, anchor_x0, anchor_y0, angle = res_to_image_anchor(annotation)
+        image_name, anchor_x0, anchor_y0, angle = res_to_image_anchor(annotation)
         for line in open(annotation).readlines():
             gt = line.split(',')
             oriented_box = np.array([int(gt[i]) for i in range(8)])
             
             ## need to warp oriented box using the negative angle
             # height, width = image.size
-            rotation_angle = -angles
+            rotation_angle = -angle
             
             ## get the center of the box
             box_width = abs((oriented_box[4] - oriented_box[2]) // 2)
             box_height = abs((oriented_box[3] - oriented_box[1]) // 2)
             box_center = (oriented_box[0] + box_width, oriented_box[3] + box_height)
+            
             ## rotate the box over the center of the box
             box_matrix  = cv2.getRotationMatrix2D(box_center, rotation_angle, 1.0)
+            ## translate the box back based on rotation
 
+            ### ======================= this is what I'm working on ============================
+            image_center = (image_default_width // 2, image_default_height // 2)
+            rotation_mat = cv2.getRotationMatrix2D(image_center, rotation_angle, scale=1.0)
+            cos = np.abs(rotation_mat[0, 0])
+            sin = np.abs(rotation_mat[0, 1])
+            
+            adjustedWidth = int((image_default_height * sin) + (image_default_width * cos))
+            adjustedHeight = int((image_default_height * cos) + (image_default_width * sin))
+
+            cX, cY = (adjustedWidth // 2, adjustedHeight // 2)
+            ### ================================================================================
+            
+            
+            nW = image_default_width
+            nH = image_default_height
+            
+
+            box_matrix[0, 2] += (nW / 2) - cX
+            box_matrix[1, 2] += (nH / 2) - cY
+            
             corners = oriented_box.reshape(-1,2)
             corners = np.hstack((corners, np.ones((corners.shape[0],1), dtype = type(corners[0][0]))))
             ## calculate the new box

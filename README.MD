@@ -14,8 +14,6 @@ Goal of this project is to use PixelLink to detect individual characters within 
 - [ ] Train on character annotations
     - [ ] Scripts to utilize all the character annotations
     - [ ] Train on all characters and organize models
-- [ ] Plot loss graphs
-- [X] Get testing output points
-    - [ ] Plot large image out of cropped
+- [X] ~~Get testing output points~~
+    - [X] ~~Plot large image out of cropped~~
 - [ ] Train all the other characters
-- [ ] Output training performance, and testing IoU
