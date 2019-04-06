@@ -101,19 +101,15 @@ def list_crops_to_annotated_image(original_image, annotations, outfile, image_de
             ### ================================================================================
             
             
-            nW = image_default_width
-            nH = image_default_height
-            
-
-            box_matrix[0, 2] += (nW / 2) - cX
-            box_matrix[1, 2] += (nH / 2) - cY
-            
             corners = oriented_box.reshape(-1,2)
             corners = np.hstack((corners, np.ones((corners.shape[0],1), dtype = type(corners[0][0]))))
             ## calculate the new box
             new_box = np.dot(box_matrix, corners.T).T.reshape(1, 8)[0]
             new_box = [int(x) for x in [new_box[0] + anchor_x0, new_box[1] + anchor_y0, new_box[2] + anchor_x0, new_box[3] + anchor_y0, new_box[4] + anchor_x0, new_box[5] + anchor_y0, new_box[6] + anchor_x0, new_box[7] + anchor_y0]]
 
+            new_box[0::2] -= cX
+            new_box[1::2] -= cY
+            
             print("Drawing Box: ", new_box)
             draw.polygon(new_box, outline="blue", fill=None)
     del draw
