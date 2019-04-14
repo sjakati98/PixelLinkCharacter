@@ -12,7 +12,7 @@ import cv2
 import numpy as np
 
 from PIL import Image, ImageDraw
-from online_rotation import rotate_box
+
 
 ## function to partition the whole predicted files into large files
 ## res_cropped_image_D5005-5028149_800_5000.txt is the format
@@ -68,6 +68,7 @@ def list_crops_to_annotated_image(original_image, annotations, outfile, image_de
     print("Stitching Image: ", original_image)
     image = Image.open(original_image)
     draw = ImageDraw.Draw(image)
+
     for annotation in annotations:
         print("Considering annotations from:", annotation)
         image_name, anchor_x0, anchor_y0, angle = res_to_image_anchor(annotation)
@@ -75,22 +76,9 @@ def list_crops_to_annotated_image(original_image, annotations, outfile, image_de
             gt = line.split(',')
             oriented_box = np.array([int(gt[i]) for i in range(8)])
             
-            ## need to warp oriented box using the negative angle
-            # height, width = image.size
-            rotation_angle = -angle
-            
-            ## get the center of the box
-            box_width = abs((oriented_box[4] - oriented_box[2]) // 2)
-            box_height = abs((oriented_box[3] - oriented_box[1]) // 2)
-            box_center = (oriented_box[0] + box_width, oriented_box[3] + box_height)
-            
-            ## rotate the box over the center of the box
-            box_matrix  = cv2.getRotationMatrix2D(box_center, rotation_angle, 1.0)
-            ## translate the box back based on rotation
-
-            ### ======================= this is what I'm working on ============================
+            ## get the dimensions of the original rotated image
             image_center = (image_default_width // 2, image_default_height // 2)
-            rotation_mat = cv2.getRotationMatrix2D(image_center, rotation_angle, scale=1.0)
+            rotation_mat = cv2.getRotationMatrix2D(image_center, angle, scale=1.0)
             cos = np.abs(rotation_mat[0, 0])
             sin = np.abs(rotation_mat[0, 1])
             
@@ -98,16 +86,18 @@ def list_crops_to_annotated_image(original_image, annotations, outfile, image_de
             adjustedHeight = int((image_default_height * cos) + (image_default_width * sin))
 
             cX, cY = (adjustedWidth // 2, adjustedHeight // 2)
-            ### ================================================================================
-            
+            ## rotate the box around the center of the original rotated image dimensions
+            box_matrix  = cv2.getRotationMatrix2D((cX, cY), -angle, 1.0)
             
             corners = oriented_box.reshape(-1,2)
             corners = np.hstack((corners, np.ones((corners.shape[0],1), dtype = type(corners[0][0]))))
             ## calculate the new box
             new_box = np.dot(box_matrix, corners.T).T.reshape(1, 8)[0]
-            new_box[0::2] += anchor_x0; new_box[0::2] -= cX
-            new_box[1::2] += anchor_y0; new_box[1::2] -= cY
-
+            
+            new_box = [int(x) for x in [new_box[0] + anchor_x0, new_box[1] + anchor_y0, new_box[2] + anchor_x0, new_box[3] + anchor_y0, new_box[4] + anchor_x0, new_box[5] + anchor_y0, new_box[6] + anchor_x0, new_box[7] + anchor_y0]]
+            new_box = np.array(new_box)
+            new_box[0::2] += int((image_default_width / 2) - cX)
+            new_box[1::2] += int((image_default_height / 2) - cY)
             new_box = list(new_box)
             
             print("Drawing Box: ", new_box)
