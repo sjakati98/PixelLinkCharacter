@@ -156,3 +156,17 @@ def driver(original_images_dir, horizontal_predicted_annotations_dir, rotated_pr
         original_image_filename = os.path.join(original_images_dir, image + ".tiff")
         outfile = os.path.join(output_dir, image + ".jpg")
         list_crops_to_annotated_image(original_image_filename, image_dict_horizontal[image], image_dict_rotated[image],outfile)
+
+original_images_dir = sys.argv[1]
+horizontal_predicted_annotations_dir = sys.argv[2]
+rotated_predicted_annotations_dir = sys.argv[3]
+output_dir = sys.argv[4]
+
+print("Ingesting images from:", original_images_dir)
+print("Ingesting horizontal annotations from: ", horizontal_predicted_annotations_dir)
+print("Ingesting rotated annotations from: ", rotated_predicted_annotations_dir)
+print("Saving annotated images to:", output_dir)
+
+driver(original_images_dir, horizontal_predicted_annotations_dir, rotated_predicted_annotations_dir, output_dir)
+
+print("Done Annotating")
