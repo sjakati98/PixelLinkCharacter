@@ -99,7 +99,7 @@ def list_crops_to_annotated_image(original_image, horizontal_annotations, rotate
     
     for annotation in rotated_annotations:
         print("Considering annotations from:", annotation)
-        _, anchor_x0, anchor_y0, angle = res_to_image_anchor(annotation)
+        _, anchor_x0, anchor_y0, angle = res_to_image_anchor(annotation, True)
         for line in open(annotation).readlines():
             gt = line.split(',')
             oriented_box = np.array([int(gt[i]) for i in range(8)])
