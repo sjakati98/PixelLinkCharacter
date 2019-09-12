@@ -27,6 +27,7 @@ def res_to_image_anchor(filename):
             - image_name:  The name of the corresponding large image, with no extension
             - anchor_x0: The x-coordinate of the top left of the associated crop region
             - anchor_y0: The y-coordinate of the top left of the associated crop region
+            - angle: The angle of rotation
     """
     filename = filename.split(os.sep)[-1]    
     pattern = "res\_cropped\_image\_(.*)\_(\d*)\_(\d*)\_(-?\d*)\.txt"
