@@ -68,15 +68,15 @@ def createPredictedDictionary(original_images_dir, predicted_annotations_dir):
     ## iterate through ground truth annotation filenames
     for filename in predicted_filenames:
         ## marshal filename into components
-        image_name, anchorX, anchorY, _ = res_to_image_anchor(filename, True)
+        image_name, anchorX, anchorY, angle = res_to_image_anchor(filename, True)
         ## if the base filename is in the dictionary, add the annotations into the dictionary
         if image_name in image_dict:
             curr_list = image_dict[image_name]
             ## extend the image ground truth annotation list with new annotations
-            curr_list.extend(getAnnotationsFromFile(os.path.join(predicted_annotations_dir, filename), anchorX, anchorY))
+            curr_list.extend(getAnnotationsFromFile(os.path.join(predicted_annotations_dir, filename), anchorX, anchorY, angle))
             image_dict[image_name] = curr_list
         else:
-            image_dict[image_name] = [getAnnotationsFromFile(os.path.join(predicted_annotations_dir, filename), anchorX, anchorY)]
+            image_dict[image_name] = [getAnnotationsFromFile(os.path.join(predicted_annotations_dir, filename), anchorX, anchorY, angle)]
     return image_dict
 
 
