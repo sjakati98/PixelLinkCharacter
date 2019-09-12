@@ -33,6 +33,21 @@ def res_to_image_anchor(filename, rotated=False):
         image_name, anchor_x0, anchor_y0= re.match(pattern, filename).groups()
         return (image_name, int(anchor_x0), int(anchor_y0))
 
+def ground_truth_to_image_anchor(filename):
+    """
+        Inputs:
+            - filename: The filename of the ground truth annotation
+        Outputs:
+            - image_name:  The name of the corresponding large image, with no extension
+            - anchor_x0: The x-coordinate of the top left of the associated crop region
+            - anchor_y0: The y-coordinate of the top left of the associated crop region
+    """
+    
+    filename = filename.split(os.sep)[-1]    
+    pattern_horizontal = "annotation\_(.*)\_(\d*)\_(\d*)\.txt"
+    image_name, anchor_x0, anchor_y0 = re.match(pattern_horizontal, filename).groups()
+    return (image_name, int(anchor_x0), int(anchor_y0))
+
 def create_file_dictionary(original_images_dir, horizontal_annotations_dir, rotated_annotations_dir):
     """
         Inputs:
