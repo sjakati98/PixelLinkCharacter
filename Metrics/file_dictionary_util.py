@@ -91,5 +91,5 @@ def generateIoUReport(calculated_iou_dictionary, outfile):
 
     with open(outfile, "w+") as f:
         for key in calculated_iou_dictionary:
-                f.write("%s: %.5f" % (key, calculated_iou_dictionary[key]))
+                f.write("%s: Precision=%.5f Recall=%.5f" % (key, calculated_iou_dictionary[key][0], calculated_iou_dictionary[key][1]))
 

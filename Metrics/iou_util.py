@@ -33,33 +33,27 @@ def performIoUCalculation(ground_truth_annotation_dictionary, predicted_annotati
         interArea = np.maximum((xB - xA + 1), 0) * np.maximum((yB - yA + 1), 0)
         boxAArea = (x12 - x11 + 1) * (y12 - y11 + 1)
         boxBArea = (x22 - x21 + 1) * (y22 - y21 + 1)
-        iou = interArea / (boxAArea + np.transpose(boxBArea) - interArea + 1e-5)
+        iou = interArea / (boxAArea + np.transpose(boxBArea) - interArea + 1e-5) # --> (len(predicted), len(gt))
 
-        avg_iou = np.mean(np.max(iou, axis=1))
-        Image_IoU[ground_truth_key] = avg_iou
-        # iou_predicted = np.sum(iou, axis=1)
+        ## do calculations for ground truth
+        iou = iou.T ## --> (len(gt), len(predicted))
+
+        ## get all scores above the threshold
+        above_threshold = (iou < 0.5).astype(int)
         
-        # #Give the option of no assignment, which is a bit better than the worst possible assignment
-        # maxc = np.max(iou, axis=1)
-        # for i in range(iou.shape[0]):
-        #     iou[i,len(gt):] = maxc[i] - 1.0
-
-        # rows, columns = linear_sum_assignment(iou)
-
-
-        # avg_iou = 0.0
-        # for idx in range(len(rows)):
-        #     row = rows[idx]
-        #     col = columns[idx]
-        #     if col < len(annotations):
-        #         intersection = compute_intersection(predictions[row], annotations[col])
-        #         union = compute_union(predictions[row], annotations[col])
-
-        #         iou = intersection / union
-        #         avg_iou += iou
-        #         IoU.append( (row, col, iou))
-
-        # Image_IoU[ground_truth_key] = avg_iou
+        ## get all false negatives
+        gt_matches = np.sum(above_threshold, axis=1)
+        num_false_negatives = len(gt_matches) - np.count_nonzero(gt_matches)
         
+        ## get all the true positives and false positives 
+        predicted_matches = np.sum(above_threshold, axis=0)
+        num_true_positives = np.count_nonzero(predicted_matches)
+        num_false_positives = len(predicted_matches) - np.count_nonzero(predicted_matches)
+
+        precision = num_true_positives / (num_true_positives + num_false_positives)
+        recall = num_true_positives / (num_true_positives + num_false_negatives)
+
+        Image_IoU[ground_truth_key] = (precision, recall)
+
 
     return Image_IoU
