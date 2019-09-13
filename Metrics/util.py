@@ -1,5 +1,6 @@
 import os
 import re
+import numpy as np
 import cv2
 
 def res_to_image_anchor(filename, rotated=False):
@@ -82,6 +83,8 @@ def rotateAnnotations(points, anchorX, anchorY, angle):
     Outputs:
         - new_box: The original annotations, rotated back
     """
+    image_default_height = image_default_width = 512
+
 
     image_center = (512 // 2, 512 // 2)
     rotation_mat = cv2.getRotationMatrix2D(image_center, angle, scale=1.0)
