@@ -1,5 +1,6 @@
 import os
 import re
+import cv2
 
 def res_to_image_anchor(filename, rotated=False):
     """
