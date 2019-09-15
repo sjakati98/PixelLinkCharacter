@@ -22,6 +22,7 @@ def performIoUCalculation(ground_truth_annotation_dictionary, predicted_annotati
             ## load predicted annotations for image
             predicted = np.array(predicted_annotation_dictionary[ground_truth_key])
 
+
         ## vectorized IoU calculation
         x11, y11, x12, y12 = np.split(predicted[:, [2,3,6,7]], 4, axis=1)
         x21, y21, x22, y22 = np.split(gt[:, [6,7,2,3]], 4, axis=1)
@@ -39,7 +40,7 @@ def performIoUCalculation(ground_truth_annotation_dictionary, predicted_annotati
         iou = iou.T ## --> (len(gt), len(predicted))
 
         ## get all scores above the threshold
-        above_threshold = (iou < 0.5).astype(int)
+        above_threshold = (iou > 0.5).astype(int)
         
         ## get all false negatives
         gt_matches = np.sum(above_threshold, axis=1)
@@ -50,9 +51,11 @@ def performIoUCalculation(ground_truth_annotation_dictionary, predicted_annotati
         num_true_positives = np.count_nonzero(predicted_matches)
         num_false_positives = len(predicted_matches) - np.count_nonzero(predicted_matches)
 
+        ## get precision and recall numbers
         precision = num_true_positives / (num_true_positives + num_false_positives)
         recall = num_true_positives / (num_true_positives + num_false_negatives)
 
+        ## set dictionary value
         Image_IoU[ground_truth_key] = (precision, recall)
 
 
