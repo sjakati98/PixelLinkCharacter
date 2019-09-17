@@ -1,3 +1,4 @@
+from __future__ import division
 import numpy as np
 
 
@@ -23,6 +24,9 @@ def performIoUCalculation(ground_truth_annotation_dictionary, predicted_annotati
             predicted = np.array(predicted_annotation_dictionary[ground_truth_key])
 
 
+        print("Total Ground Truth Annotations", len(gt))
+        print("Total Predicted Annotations", len(predicted))
+
         ## vectorized IoU calculation
         x11, y11, x12, y12 = np.split(predicted[:, [2,3,6,7]], 4, axis=1)
         x21, y21, x22, y22 = np.split(gt[:, [6,7,2,3]], 4, axis=1)
@@ -40,8 +44,10 @@ def performIoUCalculation(ground_truth_annotation_dictionary, predicted_annotati
         iou = iou.T ## --> (len(gt), len(predicted))
 
         ## get all scores above the threshold
-        above_threshold = (iou > 0.5).astype(int)
+        above_threshold = (iou >= 0.1).astype(int)
         
+        print("Above Threshold", np.count_nonzero(above_threshold))
+
         ## get all false negatives
         gt_matches = np.sum(above_threshold, axis=1)
         num_false_negatives = len(gt_matches) - np.count_nonzero(gt_matches)
@@ -50,6 +56,10 @@ def performIoUCalculation(ground_truth_annotation_dictionary, predicted_annotati
         predicted_matches = np.sum(above_threshold, axis=0)
         num_true_positives = np.count_nonzero(predicted_matches)
         num_false_positives = len(predicted_matches) - np.count_nonzero(predicted_matches)
+
+        print("Num True Positives", num_true_positives)
+        print("Num False Positives", num_false_positives)
+        print("Num False Negatives", num_false_negatives)
 
         ## get precision and recall numbers
         precision = num_true_positives / (num_true_positives + num_false_positives)

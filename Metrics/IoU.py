@@ -55,7 +55,9 @@ def driver(detector, original_images_dir, ground_truth_directory, predictions_di
     calculated_iou_dictionary = performIoUCalculation(ground_truth_annotation_dictionary, predicted_annotation_dictionary)
     
     ## output text file with all average IoU values
-    report_filepath = os.path.join(os.curdir, "iou_report.txt")
+    if not os.path.isdir(os.mkdir):
+        os.mkdir(os.curdir, "reports")
+    report_filepath = os.path.join(os.curdir, "reports", "%s_iou_report.txt" % detector)
     generateIoUReport(calculated_iou_dictionary, report_filepath)
 
     ## signal completion
