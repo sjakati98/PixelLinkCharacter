@@ -24,6 +24,7 @@ parser.add_option("-d", "--detector", help="specify which character detector is 
 parser.add_option("-o", "--original", help="directory containing the original images in tiff format")
 parser.add_option("-g", "--groundtruth", help="directory containing ground truth annotation files")
 parser.add_option("-p", "--predictions", help="directory containing predicted annotation files")
+parser.add_option("-r", "--reports", help="outfile directory to output the reports")
 
 ## get options
 (options, args) = parser.parse_args()
@@ -33,8 +34,9 @@ ground_truth_directory = options.groundtruth
 ground_truth_files = glob.glob(ground_truth_directory)
 predictions_directory = options.predictions
 predictions_files = glob.glob(predictions_directory)
+reports_directory = options.reports
 
-def driver(detector, original_images_dir, ground_truth_directory, predictions_directory):
+def driver(detector, original_images_dir, ground_truth_directory, predictions_directory, reports_dir):
     """
     Run IoU metric script for specified character detector
     
@@ -55,9 +57,12 @@ def driver(detector, original_images_dir, ground_truth_directory, predictions_di
     calculated_iou_dictionary = performPolygonIoUCalculation(ground_truth_annotation_dictionary, predicted_annotation_dictionary)
     
     ## output text file with all average IoU values
-    reports_dir = os.path.join(os.curdir, "reports")
+    if not reports_dir:
+        reports_dir = os.path.join(os.curdir, "reports")
+        
     if not os.path.isdir(reports_dir):
         os.mkdir(reports_dir)
+    
     report_filepath = os.path.join(reports_dir, "%s_iou_report.txt" % detector)
     generateIoUReport(calculated_iou_dictionary, report_filepath)
 
@@ -65,4 +70,4 @@ def driver(detector, original_images_dir, ground_truth_directory, predictions_di
     print("IoU Calculation Complete!")
 
 ## run
-driver(detector, original_images_dir, ground_truth_directory, predictions_directory)
+driver(detector, original_images_dir, ground_truth_directory, predictions_directory, reports_directory)
