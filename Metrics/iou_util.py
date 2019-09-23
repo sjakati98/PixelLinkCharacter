@@ -24,8 +24,12 @@ def performIoUCalculation(ground_truth_annotation_dictionary, predicted_annotati
             predicted = np.array(predicted_annotation_dictionary[ground_truth_key])
 
 
+
         print("Total Ground Truth Annotations", len(gt))
         print("Total Predicted Annotations", len(predicted))
+
+        if len(gt) == 0 or len(predicted) == 0:
+            continue
 
         ## vectorized IoU calculation
         x11, y11, x12, y12 = np.split(predicted[:, [2,3,6,7]], 4, axis=1)
