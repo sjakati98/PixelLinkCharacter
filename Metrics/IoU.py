@@ -16,7 +16,7 @@ from scipy.optimize import linear_sum_assignment
 
 from file_dictionary_util import (createGroundTruthDictionary,
                                   createPredictedDictionary, generateIoUReport)
-from iou_util import performIoUCalculation
+from iou_util import performIoUCalculation, performPolygonIoUCalculation
 
 ## instantiate an options parser to load ground truth annotations and predictions
 parser = OptionParser()
@@ -52,7 +52,7 @@ def driver(detector, original_images_dir, ground_truth_directory, predictions_di
     predicted_annotation_dictionary = createPredictedDictionary(original_images_dir, predictions_directory)
 
     # dictionary keys are the image filenames and value is the average IoU score
-    calculated_iou_dictionary = performIoUCalculation(ground_truth_annotation_dictionary, predicted_annotation_dictionary)
+    calculated_iou_dictionary = performPolygonIoUCalculation(ground_truth_annotation_dictionary, predicted_annotation_dictionary)
     
     ## output text file with all average IoU values
     reports_dir = os.path.join(os.curdir, "reports")
