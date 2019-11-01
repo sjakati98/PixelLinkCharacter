@@ -85,6 +85,20 @@ def createPredictedDictionary(original_images_dir, predicted_annotations_dir):
     return image_dict
 
 
+def generateIoUReportThresholded(calculated_iou_dictionary, outfile):
+    """
+    Creates a text file with the keys and values of the IoU values
+
+    Inputs:
+        - calculated_iou_dictionary: Dictionary of files with corresponding average IoU values
+        - outfile: Filepath to where hte report should be written
+    """
+
+    with open(outfile, "w+") as f:
+        for threshold in thresholds:
+            for key in calculated_iou_dictionary:
+                f.write("%s (%.1f): Precision=%.5f Recall=%.5f\n" % (key, threshold, calculated_iou_dictionary[threshold][key][0], calculated_iou_dictionary[threshold][key][1]))
+
 def generateIoUReport(calculated_iou_dictionary, outfile):
     """
     Creates a text file with the keys and values of the IoU values
