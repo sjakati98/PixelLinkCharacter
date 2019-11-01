@@ -96,6 +96,7 @@ def generateIoUReportThresholded(calculated_iou_dictionary, outfile):
 
     with open(outfile, "w+") as f:
         for threshold in thresholds:
+            f.write("Considering Threshold: %.1f" % threshold)
             for key in calculated_iou_dictionary:
                 f.write("%s (%.1f): Precision=%.5f Recall=%.5f\n" % (key, threshold, calculated_iou_dictionary[threshold][key][0], calculated_iou_dictionary[threshold][key][1]))
 

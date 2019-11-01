@@ -72,7 +72,7 @@ def driver(detector, original_images_dir, ground_truth_directory, predictions_di
     generateIoUReportThresholded(thresholded_dictionary, report_filepath)
 
     ## signal completion
-    print("IoU Calculation Complete!")
+    print("PR Curve Calculation Complete!")
 
 ## run
 driver(detector, original_images_dir, ground_truth_directory, predictions_directory, reports_directory)
