@@ -7,6 +7,7 @@ from optparse import OptionParser
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 
+from curve_utils import marshal_thresholded_dictionary, subplot_image
 from util import (getAnnotationsFromFile, ground_truth_to_image_anchor,
                   res_to_image_anchor)
 
@@ -91,11 +92,12 @@ def generateIoUReportThresholded(calculated_iou_dictionary, outfile):
 
     Inputs:
         - calculated_iou_dictionary: Dictionary of files with corresponding average IoU values
-        - outfile: Filepath to where hte report should be written
+        - outfile: Filepath to where the report should be written
     """
 
     with open(outfile, "w+") as f:
         for threshold in thresholds:
+            f.write("Considering Threshold: %.1f" % threshold)
             for key in calculated_iou_dictionary:
                 f.write("%s (%.1f): Precision=%.5f Recall=%.5f\n" % (key, threshold, calculated_iou_dictionary[threshold][key][0], calculated_iou_dictionary[threshold][key][1]))
 
@@ -105,10 +107,25 @@ def generateIoUReport(calculated_iou_dictionary, outfile):
 
     Inputs:
         - calculated_iou_dictionary: Dictionary of files with corresponding average IoU values
-        - outfile: Filepath to where hte report should be written
+        - outfile: Filepath to where the report should be written
     """
 
     with open(outfile, "w+") as f:
         for key in calculated_iou_dictionary:
                 f.write("%s: Precision=%.5f Recall=%.5f\n" % (key, calculated_iou_dictionary[key][0], calculated_iou_dictionary[key][1]))
 
+
+def generatePRCurves(thresholded_dictionary, detector, figures_dir):
+    """
+    Creates the PR Curves for thresholded precision and recall results
+
+    Inputs
+        - thresholded_dictionary: Dictionary of precision recall for thresholds
+        - figures_dir: Filepath to save curves
+        - detector: Character detector letter
+    """
+
+    ## invert the dictionaries
+    inverted_dict = marshal_thresholded_dictionary(thresholded_dictionary)
+    ## plot the curves
+    subplot_image(inverted_dict, detector, figures_dir)
