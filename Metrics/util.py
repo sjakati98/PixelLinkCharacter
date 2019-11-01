@@ -16,17 +16,17 @@ def res_to_image_anchor(filename, rotated=False):
     """
     
     filename = filename.split(os.sep)[-1]    
-    # pattern_horizontal = "res\_cropped\_image\_(.*)\_(\d*)\_(\d*)\.txt"
-    pattern = "res\_cropped\_image\_(.*)\_(\d*)\_(\d*)\_(-?\d*)\.txt"
+    pattern_horizontal = "res\_cropped\_image\_(.*)\_(\d*)\_(\d*)\.txt"
+    pattern_angle = "res\_cropped\_image\_(.*)\_(\d*)\_(\d*)\_(-?\d*)\.txt"
 
-    # if rotated:
-    #     pattern = pattern_angle
-    image_name, anchorX, anchorY, angle = re.match(pattern, filename).groups()
-    return (image_name, int(anchorX), int(anchorY), int(angle))
-    # else:
-    #     pattern = pattern_horizontal
-    #     image_name, anchorX, anchorY= re.match(pattern, filename).groups()
-    #     return (image_name, int(anchorX), int(anchorY))
+    if rotated:
+         pattern = pattern_angle
+        image_name, anchorX, anchorY, angle = re.match(pattern, filename).groups()
+        return (image_name, int(anchorX), int(anchorY), int(angle))
+    else:
+        pattern = pattern_horizontal
+        image_name, anchorX, anchorY= re.match(pattern, filename).groups()
+        return (image_name, int(anchorX), int(anchorY))
 
 def ground_truth_to_image_anchor(filename):
     """
@@ -62,7 +62,7 @@ def getAnnotationsFromFile(annotation_filename, anchorX, anchorY, angle=0):
     lines = annotation_text.split("\n")[:-1]
     ## convert to float
     float_points = lambda line: [float(x.strip()) for x in line.split(",")]
-    if angle != 0:
+    if angle == 0:
         add_anchors = lambda points: [int(x) for x in [points[0] + anchorX, points[1] + anchorY, points[2] + anchorX, points[3] + anchorY, points[4] + anchorX, points[5] + anchorY, points[6] + anchorX, points[7] + anchorY]]
         annotations = [add_anchors(float_points(line)) for line in lines]
     else:
