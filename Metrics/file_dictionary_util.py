@@ -68,7 +68,12 @@ def createPredictedDictionary(original_images_dir, predicted_annotations_dir):
     ## iterate through ground truth annotation filenames
     for filename in predicted_filenames:
         ## marshal filename into components
-        image_name, anchorX, anchorY, angle = res_to_image_anchor(filename, True)
+        # image_name, anchorX, anchorY, angle = res_to_image_anchor(filename, True)
+        image_name, anchorX, anchorY = res_to_image_anchor(fileName, False))
+
+        ## set angle to 0 to modify original functionality
+        angle = 0
+
         ## if the base filename is in the dictionary, add the annotations into the dictionary
         if image_name in image_dict:
             curr_list = image_dict[image_name]
@@ -91,5 +96,5 @@ def generateIoUReport(calculated_iou_dictionary, outfile):
 
     with open(outfile, "w+") as f:
         for key in calculated_iou_dictionary:
-                f.write("%s: Precision=%.5f Recall=%.5f" % (key, calculated_iou_dictionary[key][0], calculated_iou_dictionary[key][1]))
+                f.write("%s: Precision=%.5f Recall=%.5f\n" % (key, calculated_iou_dictionary[key][0], calculated_iou_dictionary[key][1]))
 
