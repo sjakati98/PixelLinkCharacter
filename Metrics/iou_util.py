@@ -77,7 +77,13 @@ def performIoUCalculation(ground_truth_annotation_dictionary, predicted_annotati
     return Image_IoU
 
 
-def performPolygonIoUCalculation(ground_truth_annotation_dictionary, predicted_annotation_dictionary):
+def performPolygonIoUCalculationThresholded(ground_truth_annotation_dictionary, predicted_annotation_dictionary, threshold):
+    """
+    Wrapper function for performPolygonIoUCalculation with a specified threshold
+    """
+    return performPolygonIoUCalculation(ground_truth_annotation_dictionary, predicted_annotation_dictionary, threshold=threshold)
+
+def performPolygonIoUCalculation(ground_truth_annotation_dictionary, predicted_annotation_dictionary, threshold=0.5):
     """
     Takes ground truth annotations and predicted annotations to create a dictionary of IoU scores
     Inputs:
@@ -115,7 +121,7 @@ def performPolygonIoUCalculation(ground_truth_annotation_dictionary, predicted_a
                 iou[i][j] = polygonIOU(groundTruthPolygon, predictedPolygon)
 
         ## get all scores above the threshold
-        above_threshold = (iou >= 0.1).astype(int)
+        above_threshold = (iou >= threshold).astype(int)
         
         print("Above Threshold", np.count_nonzero(above_threshold))
 

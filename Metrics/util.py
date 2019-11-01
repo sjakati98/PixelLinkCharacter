@@ -20,7 +20,7 @@ def res_to_image_anchor(filename, rotated=False):
     pattern_angle = "res\_cropped\_image\_(.*)\_(\d*)\_(\d*)\_(-?\d*)\.txt"
 
     if rotated:
-         pattern = pattern_angle
+        pattern = pattern_angle
         image_name, anchorX, anchorY, angle = re.match(pattern, filename).groups()
         return (image_name, int(anchorX), int(anchorY), int(angle))
     else:
