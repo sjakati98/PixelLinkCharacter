@@ -67,9 +67,18 @@ def driver(detector, original_images_dir, ground_truth_directory, predictions_di
         
     if not os.path.isdir(reports_dir):
         os.mkdir(reports_dir)
+
+    ## create the directory for the PR figures
+    figures_dir = os.path.join(reports_dir, "%_iou_curves" % detector)
+    if not os.path.isdir(figures_dir):
+        os.mkdir(figures_dir)
     
+    ## output the correct text report
     report_filepath = os.path.join(reports_dir, "%s_iou_report_thresholded.txt" % detector)
     generateIoUReportThresholded(thresholded_dictionary, report_filepath)
+
+    ## output the correct pr curve figures
+    generatePRCurves(thresholded_dictionary, figures_dir)
 
     ## signal completion
     print("PR Curve Calculation Complete!")
