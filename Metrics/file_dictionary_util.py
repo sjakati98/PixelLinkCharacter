@@ -70,7 +70,7 @@ def createPredictedDictionary(original_images_dir, predicted_annotations_dir):
     for filename in predicted_filenames:
         ## marshal filename into components
         # image_name, anchorX, anchorY, angle = res_to_image_anchor(filename, True)
-        image_name, anchorX, anchorY = res_to_image_anchor(fileName, False)
+        image_name, anchorX, anchorY = res_to_image_anchor(filename, False)
 
         ## set angle to 0 to modify original functionality
         angle = 0
