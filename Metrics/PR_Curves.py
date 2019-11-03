@@ -75,7 +75,7 @@ def driver(detector, original_images_dir, ground_truth_directory, predictions_di
     
     ## output the correct text report
     report_filepath = os.path.join(reports_dir, "%s_iou_report_thresholded.txt" % detector)
-    generateIoUReportThresholded(thresholded_dictionary, report_filepath)
+    generateIoUReportThresholded(thresholds, thresholded_dictionary, report_filepath)
 
     ## output the correct pr curve figures
     generatePRCurves(thresholded_dictionary, figures_dir)

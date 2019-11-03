@@ -86,11 +86,12 @@ def createPredictedDictionary(original_images_dir, predicted_annotations_dir):
     return image_dict
 
 
-def generateIoUReportThresholded(calculated_iou_dictionary, outfile):
+def generateIoUReportThresholded(thresholds, calculated_iou_dictionary, outfile):
     """
     Creates a text file with the keys and values of the IoU values
 
     Inputs:
+        - thresholds: List of thresholds being considered
         - calculated_iou_dictionary: Dictionary of files with corresponding average IoU values
         - outfile: Filepath to where the report should be written
     """
