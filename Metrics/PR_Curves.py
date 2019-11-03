@@ -15,7 +15,7 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 
 from file_dictionary_util import (createGroundTruthDictionary,
-                                  createPredictedDictionary, generateIoUReport)
+                                  createPredictedDictionary, generateIoUReport, generateIoUReportThresholded)
 from iou_util import performPolygonIoUCalculationThresholded
 
 ## instantiate an options parser to load ground truth annotations and predictions
@@ -69,7 +69,7 @@ def driver(detector, original_images_dir, ground_truth_directory, predictions_di
         os.mkdir(reports_dir)
 
     ## create the directory for the PR figures
-    figures_dir = os.path.join(reports_dir, "%_iou_curves" % detector)
+    figures_dir = os.path.join(reports_dir, "%s_iou_curves" % detector)
     if not os.path.isdir(figures_dir):
         os.mkdir(figures_dir)
     
