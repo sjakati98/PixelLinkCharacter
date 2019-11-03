@@ -15,7 +15,9 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 
 from file_dictionary_util import (createGroundTruthDictionary,
-                                  createPredictedDictionary, generateIoUReport, generateIoUReportThresholded)
+                                  createPredictedDictionary, generateIoUReport,
+                                  generateIoUReportThresholded,
+                                  generatePRCurves)
 from iou_util import performPolygonIoUCalculationThresholded
 
 ## instantiate an options parser to load ground truth annotations and predictions
@@ -54,7 +56,7 @@ def driver(detector, original_images_dir, ground_truth_directory, predictions_di
     predicted_annotation_dictionary = createPredictedDictionary(original_images_dir, predictions_directory)
 
     ## set number of curve threshold values
-    thresholds = np.linspace(0, 1, 11)
+    thresholds = list(np.linspace(0, 1, 11))
     thresholded_dictionary = {}
 
     # dictionary keys are the image filenames and value is the average IoU score
@@ -78,7 +80,7 @@ def driver(detector, original_images_dir, ground_truth_directory, predictions_di
     generateIoUReportThresholded(thresholds, thresholded_dictionary, report_filepath)
 
     ## output the correct pr curve figures
-    generatePRCurves(thresholded_dictionary, figures_dir)
+    generatePRCurves(thresholded_dictionary, detector, figures_dir)
 
     ## signal completion
     print("PR Curve Calculation Complete!")

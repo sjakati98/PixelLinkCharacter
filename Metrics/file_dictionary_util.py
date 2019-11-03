@@ -95,11 +95,10 @@ def generateIoUReportThresholded(thresholds, calculated_iou_dictionary, outfile)
         - calculated_iou_dictionary: Dictionary of files with corresponding average IoU values
         - outfile: Filepath to where the report should be written
     """
-
     with open(outfile, "w+") as f:
         for threshold in thresholds:
-            f.write("Considering Threshold: %.1f" % threshold)
-            for key in calculated_iou_dictionary:
+            f.write("Considering Threshold: %.1f\n" % threshold)
+            for key in calculated_iou_dictionary[threshold]:
                 f.write("%s (%.1f): Precision=%.5f Recall=%.5f\n" % (key, threshold, calculated_iou_dictionary[threshold][key][0], calculated_iou_dictionary[threshold][key][1]))
 
 def generateIoUReport(calculated_iou_dictionary, outfile):
