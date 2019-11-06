@@ -7,7 +7,7 @@ from optparse import OptionParser
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 
-from curve_utils import marshal_thresholded_dictionary, subplot_image
+from curve_utils import marshal_thresholded_dictionary, subplot_image, subplot_curve
 from util import (getAnnotationsFromFile, ground_truth_to_image_anchor,
                   res_to_image_anchor)
 
@@ -88,6 +88,8 @@ def createPredictedDictionary(original_images_dir, predicted_annotations_dir):
 
 def generateIoUReportThresholded(thresholds, calculated_iou_dictionary, outfile):
     """
+    DEPRECATED: flawed logic
+
     Creates a text file with the keys and values of the IoU values
 
     Inputs:
@@ -103,6 +105,8 @@ def generateIoUReportThresholded(thresholds, calculated_iou_dictionary, outfile)
 
 def generateIoUReport(calculated_iou_dictionary, outfile):
     """
+    DEPRECATED: flawed logic
+
     Creates a text file with the keys and values of the IoU values
 
     Inputs:
@@ -117,6 +121,8 @@ def generateIoUReport(calculated_iou_dictionary, outfile):
 
 def generatePRCurves(thresholded_dictionary, detector, figures_dir):
     """
+    DEPRECATED: flawed logic
+
     Creates the PR Curves for thresholded precision and recall results
 
     Inputs
@@ -129,3 +135,42 @@ def generatePRCurves(thresholded_dictionary, detector, figures_dir):
     inverted_dict = marshal_thresholded_dictionary(thresholded_dictionary)
     ## plot the curves
     subplot_image(inverted_dict, detector, figures_dir)
+
+def generatePrecisionRecallReport(calculated_iou_dictionary, detector, report_dir, report_path):
+    """
+    Creates a text file with the keys and values of the mean precision recall values
+    and plots the precision recall curves for detectors.
+
+    Inputs:
+        - calculated_iou_dictionary: Dictionary of files with corresponding performance values
+        - detector: Character detector letter
+        - report_path: Filepath to where the report should be written
+    """
+
+    ## capture the detector's mean average precision over the different images
+    mAP = calculated_iou_dictionary['detector_mAP']
+    
+    with open(report_path, "w+") as f:
+
+        ## write the mean average precision value
+        f.write("Mean Average Precision=%s\n" % (str(mAP)))
+
+        ## write the report for each image
+        for key in calculated_iou_dictionary:
+            ## each image has (prec, mprec, rec, mrec)
+            ## where prec is a list of precision values
+            ## mprec is the list of monotonically decreasing precision values
+            ## rec is a list of recall values
+            ## mrec is the monotonically increasing recall values
+            ## ap is the average precision
+
+            if key == 'detector_mAP':
+                continue
+
+            ## unpack the values
+            prec, mprec, rec, mrec, ap = calculated_iou_dictionary[key]
+            ## write the average precision over the image
+            f.write("%s: Average Precision=%s\n" % (key, str(ap)))
+            ## plot the precision recall curve; use mprec and mrec for interpolated values
+            subplot_curve(prec, rec, ap, detector, key, report_dir)
+            

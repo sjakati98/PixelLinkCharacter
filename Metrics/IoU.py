@@ -15,7 +15,7 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 
 from file_dictionary_util import (createGroundTruthDictionary,
-                                  createPredictedDictionary, generateIoUReport)
+                                  createPredictedDictionary, generateIoUReport, generatePrecisionRecallReport)
 from iou_util import performIoUCalculation, performPolygonIoUCalculation
 
 ## instantiate an options parser to load ground truth annotations and predictions
@@ -64,7 +64,8 @@ def driver(detector, original_images_dir, ground_truth_directory, predictions_di
         os.mkdir(reports_dir)
     
     report_filepath = os.path.join(reports_dir, "%s_iou_report.txt" % detector)
-    generateIoUReport(calculated_iou_dictionary, report_filepath)
+    # generateIoUReport(calculated_iou_dictionary, report_filepath)
+    generatePrecisionRecallReport(calculated_iou_dictionary, detector, reports_dir, report_filepath)
 
     ## signal completion
     print("IoU Calculation Complete!")

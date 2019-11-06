@@ -5,6 +5,9 @@ import statistics
 
 def marshal_thresholded_dictionary(thresholded_dictionary):
   """
+
+  DEPRECATED: not used
+
   Inverts the provided dictionary for use with precision recall plotting
   Inputs:
     - thresholded_dictionary: {threshold: {image: (pre, rec)}}
@@ -25,6 +28,9 @@ def marshal_thresholded_dictionary(thresholded_dictionary):
 
 def subplot_image(marshaled_dictionary, detector, filepath):
   """
+
+  DEPRECATED: flawed logic
+
   Plots the marshaled dictionary, plots the values, and saves the image to the specified path
   Inputs:
     - marshaled_dictionary: {image: [(threshold, (pre, rec)))]}
@@ -53,3 +59,25 @@ def subplot_image(marshaled_dictionary, detector, filepath):
     save_path = os.path.join(filepath, "{letter}_detector_on_{image}.jpg".format(letter=detector, image=image))
     print(save_path)
     plt.savefig(save_path);
+
+def subplot_curve(precision, recall, ap, detector, image, filepath):
+  """
+  Plots curve of precision and recall for detector. Saves plot to specified filepath.
+
+  Inputs:
+    - precision: List of precision values
+    - recall: List of recall values
+    - ap: Average precision value
+    - detector: Name of detector for report
+    - image: Name of image for report
+    - filepath: Out file path of plot image
+  """
+  ## create the plot
+  plt.figure();
+  plt.plot(recall, precision, '-o');
+  plt.xlabel('Recall');
+  plt.ylabel('Precision');
+  plt.title("Average Precision: " + str(ap));
+  save_path = os.path.join(filepath, "{letter}_detector_on_{image}.jpg".format(letter=detector, image=image))
+  print(save_path)
+  plt.savefig(save_path);
