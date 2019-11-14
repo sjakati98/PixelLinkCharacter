@@ -11,7 +11,7 @@ import sys
 from crop_and_convert_tiff import save_cropped_image
 from crop_character_annotations import save_cropped_annotations
 
-def harvest(images_parent_directory, annotations_parent_directory, crop_directory):
+def harvest(images_parent_directory, annotations_parent_directory, crop_directory, updated=False):
     ## Find the filenames of TIFF images, and then finds the corresponding annotation file
     ## Arguments
         ## images_parent_directory: Parent directory where the images live
@@ -32,7 +32,10 @@ def harvest(images_parent_directory, annotations_parent_directory, crop_director
 
             for annotation_folder in list(filter(lambda folder: os.path.isdir(os.path.join(annotations_parent_directory, folder)), os.listdir(annotations_parent_directory))):
                 ## get the corresponding annotation filename
-                annotation_filename = os.path.join(annotations_parent_directory, annotation_folder, "current", file_stripped_name + ".npy")
+                if updated:
+                    annotation_filename = os.path.join(annotations_parent_directory, annotation_folder, file_stripped_name + ".npy")
+                else:
+                    annotation_filename = os.path.join(annotations_parent_directory, annotation_folder, "current", file_stripped_name + ".npy")
                 ## start annotation cropping
                 if not os.path.exists(os.path.join(crop_directory, "annotations", annotation_folder)):
                     os.mkdir(os.path.join(crop_directory, "annotations", annotation_folder))
@@ -50,7 +53,7 @@ if __name__ == "__main__":
     
     if not os.path.exists(crop_directory):
         os.mkdir(crop_directory)
-        
+
     os.mkdir(os.path.join(crop_directory, "images"))
     os.mkdir(os.path.join(crop_directory, "annotations"))
 
