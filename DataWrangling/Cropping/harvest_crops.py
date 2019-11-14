@@ -50,7 +50,8 @@ if __name__ == "__main__":
     
     if not os.path.exists(crop_directory):
         os.mkdir(crop_directory)
-        os.mkdir(os.path.join(crop_directory, "images"))
-        os.mkdir(os.path.join(crop_directory, "annotations"))
+        
+    os.mkdir(os.path.join(crop_directory, "images"))
+    os.mkdir(os.path.join(crop_directory, "annotations"))
 
     harvest(images_parent_directory, annotations_parent_directory, crop_directory)
