@@ -25,6 +25,7 @@ parser.add_option("-o", "--original", help="directory containing the original im
 parser.add_option("-g", "--groundtruth", help="directory containing ground truth annotation files")
 parser.add_option("-p", "--predictions", help="directory containing predicted annotation files")
 parser.add_option("-r", "--reports", help="outfile directory to output the reports")
+parser.add_option("-e", "--east", help="whether these results are for east")
 
 ## get options
 (options, args) = parser.parse_args()
@@ -35,8 +36,9 @@ ground_truth_files = glob.glob(ground_truth_directory)
 predictions_directory = options.predictions
 predictions_files = glob.glob(predictions_directory)
 reports_directory = options.reports
+east = options.east
 
-def driver(detector, original_images_dir, ground_truth_directory, predictions_directory, reports_dir):
+def driver(detector, original_images_dir, ground_truth_directory, predictions_directory, reports_dir, east=False):
     """
     Run IoU metric script for specified character detector
     
@@ -51,7 +53,7 @@ def driver(detector, original_images_dir, ground_truth_directory, predictions_di
     
     ## concatenate all predicted annotations for an image into a single text file
     ## dictionary keys are image filenames and value is list of lists of all annotations in float 8 point form
-    predicted_annotation_dictionary = createPredictedDictionary(original_images_dir, predictions_directory)
+    predicted_annotation_dictionary = createPredictedDictionary(original_images_dir, predictions_directory, east)
 
     # dictionary keys are the image filenames and value is the average IoU score
     calculated_iou_dictionary = performPolygonIoUCalculation(ground_truth_annotation_dictionary, predicted_annotation_dictionary)
@@ -71,4 +73,7 @@ def driver(detector, original_images_dir, ground_truth_directory, predictions_di
     print("IoU Calculation Complete!")
 
 ## run
-driver(detector, original_images_dir, ground_truth_directory, predictions_directory, reports_directory)
+if east:
+    driver(detector, original_images_dir, ground_truth_directory, predictions_directory, reports_directory, east)
+else:
+    driver(detector, original_images_dir, ground_truth_directory, predictions_directory, reports_directory)

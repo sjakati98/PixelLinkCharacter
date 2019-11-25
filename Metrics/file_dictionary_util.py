@@ -46,7 +46,7 @@ def createGroundTruthDictionary(original_images_dir, ground_truth_annotations_di
             image_dict[image_name] = [getAnnotationsFromFile(os.path.join(ground_truth_annotations_dir, filename), anchorX, anchorY)]
     return image_dict
 
-def createPredictedDictionary(original_images_dir, predicted_annotations_dir):
+def createPredictedDictionary(original_images_dir, predicted_annotations_dir, east=False):
     """
     Takes all cropped annotations by specified letter, and compiles them into a dictionary. (Handles crop offsets)
     Inputs:
@@ -70,7 +70,7 @@ def createPredictedDictionary(original_images_dir, predicted_annotations_dir):
     for filename in predicted_filenames:
         ## marshal filename into components
         # image_name, anchorX, anchorY, angle = res_to_image_anchor(filename, True)
-        image_name, anchorX, anchorY = res_to_image_anchor(filename, False)
+        image_name, anchorX, anchorY = res_to_image_anchor(filename, False, east)
 
         ## set angle to 0 to modify original functionality
         angle = 0
