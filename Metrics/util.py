@@ -3,11 +3,12 @@ import re
 import numpy as np
 import cv2
 
-def res_to_image_anchor(filename, rotated=False):
+def res_to_image_anchor(filename, rotated=False, east=False):
     """
         Inputs:
             - filename: The filename of the predicted output annotation
             - rotated: Indicates whether the crop is rotated
+            - east: For east outputs
         Outputs:
             - image_name:  The name of the corresponding large image, with no extension
             - anchorX: The x-coordinate of the top left of the associated crop region
@@ -19,13 +20,18 @@ def res_to_image_anchor(filename, rotated=False):
     pattern_horizontal = "res\_cropped\_image\_(.*)\_(\d*)\_(\d*)\.txt"
     pattern_angle = "res\_cropped\_image\_(.*)\_(\d*)\_(\d*)\_(-?\d*)\.txt"
 
+    if east:
+        pattern = "cropped\_image\_(.*)\_(\d*)\_(\d*)\.txt"
+        image_name, anchorX, anchorY = re.match(pattern, filename).groups()
+        return (image_name, int(anchorX), int(anchorY))
+
     if rotated:
         pattern = pattern_angle
         image_name, anchorX, anchorY, angle = re.match(pattern, filename).groups()
         return (image_name, int(anchorX), int(anchorY), int(angle))
     else:
         pattern = pattern_horizontal
-        image_name, anchorX, anchorY= re.match(pattern, filename).groups()
+        image_name, anchorX, anchorY = re.match(pattern, filename).groups()
         return (image_name, int(anchorX), int(anchorY))
 
 def ground_truth_to_image_anchor(filename):
